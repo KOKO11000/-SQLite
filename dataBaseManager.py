@@ -8,25 +8,24 @@ class DataBaseManager:
         self.cursor = self.connection.cursor()
 
     def creat_tables(self):
-        create_table_person = self.cursor.execute("""CTREAT TABLE person(
-                                   
-                person_id INTEGER primary key
-                name TEXT NOT NULL
-                age  INTEGER NOT NULL
-                email TEXT UNQUE NOT NULL);                                                                           )
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS person (                                   
+                person_id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                age  INTEGER NOT NULL,
+                email TEXT UNIQUE NOT NULL)
             """)
-        create_table_car = self.cursor.execute("""CTREAT TABLE CAR(
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS car(
                                    
-                CAR_id INTEGER primary key
-                brand TEXT NOT NULL
-                model TEXT NOT NULL 
-                year INTEGER NOT NULL
-                color TEXT NOT NULL
-                owner_id INTEGER
-                FOREIGN KEY (owner_id) REFERENCES person(person_id)                                                         
-                                  );
+                car_id INTEGER primary key,
+                brand TEXT NOT NULL,
+                model TEXT NOT NULL, 
+                year INTEGER NOT NULL,
+                color TEXT NOT NULL,
+                owner_id INTEGER,
+                FOREIGN KEY (owner_id) REFERENCES person(person_id))                                                                                         
             """)
-        return create_table_person, create_table_car
+        self.connection.commit()
+        
 
     def insert_person(self):
         ins_person = self.cursor.execute(
@@ -70,3 +69,6 @@ class DataBaseManager:
 
     def close(self):
         self.connection.close()
+
+a = DataBaseManager()
+a.creat_tables()
